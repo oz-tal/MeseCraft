@@ -55,3 +55,11 @@ end
 if minetest.get_modpath("rainbow_ore") then
 		ingots.register_ingots("rainbow_ore:rainbow_ore_ingot", "ingot_rainbow_ore.png", conf.is_big)
 end
+
+if minetest.get_modpath("everness") then
+		ingots.register_ingots("everness:pyrite_ingot", "ingot_pyrite.png", conf.is_big)
+end
+
+if minetest.get_modpath("pigiron") then
+		ingots.register_ingots("pigiron:iron_ingot", "ingot_pig_iron.png", conf.is_big)
+end
