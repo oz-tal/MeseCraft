@@ -138,7 +138,9 @@ minetest.register_craft({
 })
 
 -- Add mesecraft_toolranks support
-mesecraft_toolranks.register_tool("nether:pick_nether")
-mesecraft_toolranks.register_tool("nether:shovel_nether")
-mesecraft_toolranks.register_tool("nether:axe_nether")
-mesecraft_toolranks.register_tool("nether:sword_nether")
+if minetest.get_modpath("mesecraft_toolranks") then
+	mesecraft_toolranks.register_tool("nether:pick_nether")
+	mesecraft_toolranks.register_tool("nether:shovel_nether")
+	mesecraft_toolranks.register_tool("nether:axe_nether")
+	mesecraft_toolranks.register_tool("nether:sword_nether")
+end
