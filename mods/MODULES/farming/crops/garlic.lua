@@ -11,7 +11,7 @@ local S = farming.translate
 minetest.register_craftitem("farming:garlic_clove", {
 	description = S("Garlic clove"),
 	inventory_image = "crops_garlic_clove.png",
-	groups = {seed = 2, food_garlic_clove = 1, flammable = 3},
+	groups = {compostability = 65, seed = 2, food_garlic_clove = 1, flammable = 3},
 	on_place = function(itemstack, placer, pointed_thing)
 		return farming.place_seed(itemstack, placer, pointed_thing, "farming:garlic_1")
 	end
@@ -49,16 +49,16 @@ minetest.register_node("farming:garlic_braid", {
 	paramtype = "light",
 	paramtype2 = "facedir",
 	tiles = {
-		"crops_garlic_braid_side.png","crops_garlic_braid.png",
+		"crops_garlic_braid_top.png","crops_garlic_braid.png",
 		"crops_garlic_braid_side.png^[transformFx","crops_garlic_braid_side.png",
 		"crops_garlic_braid.png","crops_garlic_braid.png"
 	},
 	groups = {vessel = 1, dig_immediate = 3, flammable = 3},
-	sounds = default.node_sound_leaves_defaults(),
+	sounds = farming.sounds.node_sound_leaves_defaults(),
 	node_box = {
 		type = "fixed",
 		fixed = {
-				{-0.13, -0.45, 0.5, 0.13, 0.45, 0.24}
+				{-0.1875, -0.5, 0.5, 0.1875, 0.5, 0.125}
 		}
 	}
 })
@@ -92,10 +92,10 @@ local def = {
 	drop = "",
 	selection_box = farming.select,
 	groups = {
-		snappy = 3, flammable = 3, plant = 1, attached_node = 1,
+		handy = 1, snappy = 3, flammable = 3, plant = 1, attached_node = 1,
 		not_in_creative_inventory = 1, growing = 1
 	},
-	sounds = default.node_sound_leaves_defaults()
+	sounds = farming.sounds.node_sound_leaves_defaults()
 }
 
 -- stage 1
