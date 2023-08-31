@@ -98,6 +98,9 @@ if minetest.get_modpath('farming') then
   drinks.juiceable['rhubarb'] = true
   drinks.juiceable['pineapple'] = { amount = 4 }
   drinks.juiceable['pineapple_ring'] = { juice = 'pineapple', amount = 0.8 }
+  drinks.juiceable['blueberries'] = true
+  drinks.juiceable['blackberry'] = true
+  drinks.juiceable['strawberry'] = true
   drinks.drink_table['melon'] = { desc = S('Melon'), color = '#ef4646'}
   drinks.drink_table['tomato'] = { desc = S('Tomato'), color = '#990000'}
   drinks.drink_table['carrot'] = { desc = S('Carrot'), color = '#ed9121'}
@@ -107,6 +110,9 @@ if minetest.get_modpath('farming') then
   drinks.drink_table['raspberries'] = { desc = S('Raspberry'), color = '#C70039'}
   drinks.drink_table['rhubarb'] = { desc = S('Rhubarb'), color = '#fb8461'}
   drinks.drink_table['pineapple'] = { desc = S('Pineapple'), color = '#DCD611'}
+  drinks.drink_table['blueberries'] = { desc = S('Blueberry'), color = '#521DCB'}
+  drinks.drink_table['blackberry'] = { desc = S('Blackberry'), color = '#581845'}
+  drinks.drink_table['strawberry'] = { desc = S('Strawberry'), color = '#FF3636'}
   minetest.unregister_item('farming:pineapple_juice')
   minetest.register_alias('farming:pineapple_juice', 'drinks:jcu_pineapple')
   minetest.unregister_item('farming:carrot_juice')
