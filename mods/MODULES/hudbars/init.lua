@@ -52,6 +52,10 @@ local function player_exists(player)
 end
 
 local function make_label(format_string, format_string_config, label, start_value, max_value)
+	if hb.settings.hide_labels then
+		return ""
+	end
+
 	local params = {}
 	local order = format_string_config.order
 	for o=1, #order do
@@ -72,14 +76,12 @@ local function make_label(format_string, format_string_config, label, start_valu
 		end
 	end
 	local ret
-	if format_string_config.textdomain then
+	if format_string_config.textdomain and minetest.translate then
 		ret = minetest.translate(format_string_config.textdomain, format_string, unpack(params))
 	else
 		ret = S(format_string, unpack(params))
 	end
---commenting out original to output a blank string
---	return ret
-	return ""
+	return ret
 end
 
 -- Table which contains all players with active default HUD bars (only for internal use)
@@ -122,6 +124,7 @@ function hb.get_hudbar_position_index(identifier)
 end
 
 function hb.register_hudbar(identifier, text_color, label, textures, default_start_value, default_start_max, default_start_hidden, format_string, format_string_config)
+	minetest.log("action", "hb.register_hudbar: "..tostring(identifier))
 	local hudtable = {}
 	local pos, offset
 	local index = math.floor(hb.get_hudbar_position_index(identifier))
@@ -224,7 +227,9 @@ function hb.register_hudbar(identifier, text_color, label, textures, default_sta
 			-- a debug log warning, but nothing is explained in lua_api.txt.
 			-- This section is a potential bug magnet, please watch with care!
 			-- The size of the bar image is expected to be exactly 2×16 pixels.
-			bar_size = nil
+			-- 
+			-- bar_size = nil
+			bar_size = {x=2, y=16}
 		elseif hb.settings.bar_type == "statbar_classic" or hb.settings.bar_type == "statbar_modern" then
 			bar_image = textures.icon
 			bgicon = textures.bgicon
@@ -405,6 +410,7 @@ function hb.hide_hudbar(player, identifier)
 	local name = player:get_player_name()
 	local hudtable = hb.get_hudtable(identifier)
 	if hudtable == nil then return false end
+	if hudtable.hudstate[name].hidden == true then return true end
 	if hb.settings.bar_type == "progress_bar" then
 		if hudtable.hudids[name].icon ~= nil then
 			player:hud_change(hudtable.hudids[name].icon, "scale", {x=0,y=0})
@@ -423,6 +429,7 @@ function hb.unhide_hudbar(player, identifier)
 	local name = player:get_player_name()
 	local hudtable = hb.get_hudtable(identifier)
 	if hudtable == nil then return false end
+	if hudtable.hudstate[name].hidden == false then return true end
 	local value = hudtable.hudstate[name].value
 	local max = hudtable.hudstate[name].max
 	if hb.settings.bar_type == "progress_bar" then
@@ -445,6 +452,7 @@ end
 function hb.get_hudbar_state(player, identifier)
 	if not player_exists(player) then return nil end
 	local ref = hb.get_hudtable(identifier).hudstate[player:get_player_name()]
+	if not ref then return nil end
 	-- Do not forget to update this chunk of code in case the state changes
 	local copy = {
 		hidden = ref.hidden,
@@ -499,7 +507,8 @@ end
 
 local function update_health(player)
 	local hp_max = player:get_properties().hp_max
-	hb.change_hudbar(player, "health", player:get_hp(), hp_max)
+	local hp = math.min(player:get_hp(), hp_max)
+	hb.change_hudbar(player, "health", hp, hp_max)
 end
 
 -- update built-in HUD bars
