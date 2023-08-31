@@ -253,19 +253,8 @@ minetest.override_item("default:sword_bronze", {
 
 -- Add [mesecraft_toolranks] mod support if found
 if minetest.get_modpath("mesecraft_toolranks") then
-
-	-- Helper function
-	local function add_tool(name, desc, afteruse)
-
-		minetest.override_item(name, {
-			original_description = desc,
-			description = mesecraft_toolranks.create_description(desc, 0, 1),
-			after_use = afteruse and mesecraft_toolranks.new_afteruse
-		})
-	end
-
-	add_tool("pigiron:pick_iron", "Iron Pickaxe", true)
-	add_tool("pigiron:axe_iron", "Iron Axe", true)
-	add_tool("pigiron:shovel_iron", "Iron Shovel", true)
-	add_tool("pigiron:sword_iron", "Iron Sword", true)
+	mesecraft_toolranks.register_tool("pigiron:pick_iron")
+	mesecraft_toolranks.register_tool("pigiron:axe_iron")
+	mesecraft_toolranks.register_tool("pigiron:shovel_iron")
+	mesecraft_toolranks.register_tool("pigiron:sword_iron")
 end
