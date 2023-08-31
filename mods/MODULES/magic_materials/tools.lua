@@ -68,3 +68,9 @@ if minetest.get_modpath("farming") then
         material = "magic_materials:arcanite_crystal"
     })
 end
+
+-- Add mesecraft_toolranks support
+mesecraft_toolranks.register_tool("magic_materials:pick_arcanite")
+mesecraft_toolranks.register_tool("magic_materials:shovel_arcanite")
+mesecraft_toolranks.register_tool("magic_materials:axe_arcanite")
+mesecraft_toolranks.register_tool("magic_materials:sword_arcanite")
