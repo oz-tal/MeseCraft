@@ -309,27 +309,15 @@ minetest.register_alias("moreores:tin_block", "default:tinblock")
 minetest.register_alias("moreores:tin_lump", "default:tin_lump")
 
 -- mesecraft_toolranks Mod Support
-
-local function add_tool(name, desc, afteruse)
-
-	minetest.override_item(name, {
-		original_description = desc,
-		description = mesecraft_toolranks.create_description(desc, 0, 1),
-		after_use = afteruse and mesecraft_toolranks.new_afteruse
-	})
-end
-
 if minetest.get_modpath("mesecraft_toolranks") then
-
-	add_tool("moreores:pick_silver", S("%s Pickaxe"):format(S("Silver")), true)
-	add_tool("moreores:axe_silver", S("%s Axe"):format(S("Silver")), true)
-	add_tool("moreores:shovel_silver", S("%s Shovel"):format(S("Silver")), true)
-	add_tool("moreores:sword_silver", S("%s Sword"):format(S("Silver")), true)
-
-	add_tool("moreores:pick_mithril", S("%s Pickaxe"):format(S("Mithril")), true)
-	add_tool("moreores:axe_mithril", S("%s Axe"):format(S("Mithril")), true)
-	add_tool("moreores:shovel_mithril", S("%s Shovel"):format(S("Mithril")), true)
-	add_tool("moreores:sword_mithril", S("%s Sword"):format(S("Mithril")), true)
+	mesecraft_toolranks.register_tool("moreores:pick_silver")
+	mesecraft_toolranks.register_tool("moreores:axe_silver")
+	mesecraft_toolranks.register_tool("moreores:shovel_silver")
+	mesecraft_toolranks.register_tool("moreores:sword_silver")
+	mesecraft_toolranks.register_tool("moreores:pick_mithril")
+	mesecraft_toolranks.register_tool("moreores:axe_mithril")
+	mesecraft_toolranks.register_tool("moreores:shovel_mithril")
+	mesecraft_toolranks.register_tool("moreores:sword_mithril")
 end
 
 print ("[MOD] moreores " .. S("loaded"))
