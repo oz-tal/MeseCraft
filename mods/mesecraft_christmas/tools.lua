@@ -45,15 +45,7 @@ minetest.register_alias("mesecraft_christmas:candy_cane_sword", "mesecraft_chris
 
 -- Add mesecraft_toolranks support
 if minetest.get_modpath("mesecraft_toolranks") then
-	-- Helper function
-	local function add_tool(name, desc, afteruse)
-		minetest.override_item(name, {
-			original_description = desc,
-			description = mesecraft_toolranks.create_description(desc, 0, 1),
-			after_use = afteruse and mesecraft_toolranks.new_afteruse
-		})
-	end
-	add_tool("mesecraft_christmas:pick_cane", "Candy Cane Pickaxe", true)
-	add_tool("mesecraft_christmas:axe_cane", "Candy Cane Axe", true)
-	add_tool("mesecraft_christmas:sword_cane", "Candy Cane Sword", true)
+	mesecraft_toolranks.register_tool("mesecraft_christmas:pick_cane")
+	mesecraft_toolranks.register_tool("mesecraft_christmas:axe_cane")
+	mesecraft_toolranks.register_tool("mesecraft_christmas:sword_cane")
 end
