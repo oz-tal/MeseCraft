@@ -15,6 +15,18 @@ minetest.register_craft({
 	}
 })
 
+-- QUICKFIX TO CONVERT STEEL BUCKET TO [NAMELESS] BUCKET BACK AND FORTH
+minetest.register_craft({
+	type = "shapeless",
+	output = "mesecraft_bucket:bucket_empty 1",
+	recipe = {"bucket:bucket_empty_steel"}
+})
+minetest.register_craft({
+	type = "shapeless",
+	output = "bucket:bucket_empty_steel 1",
+	recipe = {"mesecraft_bucket:bucket_empty"}
+})
+
 -- Initialize
 mesecraft_bucket = {}
 mesecraft_bucket.liquids = {}
