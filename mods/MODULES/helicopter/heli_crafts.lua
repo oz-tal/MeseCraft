@@ -71,7 +71,7 @@ if minetest.get_modpath("default") then
 		output = "helicopter:heli",
 		recipe = {
 			{"", "", "helicopter:blades"},
-			{"", "oil:oil_bucket", "basic_materials:motor"},
+			{"", "biofuel:fuel_can", "basic_materials:motor"},
 			{"helicopter:blades", "basic_materials:motor", "helicopter:cabin"},
 		}
 	})
