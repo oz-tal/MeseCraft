@@ -1,5 +1,5 @@
 
-local S = farming.intllib
+local S = farming.translate
 
 -- coffee
 minetest.register_craftitem("farming:coffee_beans", {
@@ -11,7 +11,7 @@ minetest.register_craftitem("farming:coffee_beans", {
 	end
 })
 
--- cold cup of coffee
+-- cup of coffee
 minetest.register_node("farming:coffee_cup", {
 	description = S("Cup of Coffee"),
 	drawtype = "torchlike",
@@ -32,17 +32,18 @@ minetest.register_node("farming:coffee_cup", {
 minetest.register_alias("farming:coffee_cup_hot", "farming:coffee_cup")
 minetest.register_alias("farming:drinking_cup", "vessels:drinking_glass")
 
+local tmp = farming.use_utensils and "farming:saucepan" or ""
+
 minetest.register_craft( {
 	output = "farming:coffee_cup",
-	type = "shapeless",
 	recipe = {
-		"vessels:drinking_glass", "group:food_coffee",
-		"mesecraft_bucket:bucket_water", "group:food_saucepan"},
+		{"group:food_coffee", "group:food_water_glass", tmp}
+	},
 	replacements = {
-		{"mesecraft_bucket:bucket_water", "mesecraft_bucket:bucket_empty"},
 		{"group:food_saucepan", "farming:saucepan"}
 	}
 })
+
 
 -- coffee definition
 local def = {
@@ -53,6 +54,7 @@ local def = {
 	walkable = false,
 	buildable_to = true,
 	drop = "",
+	waving = 1,
 	selection_box = farming.select,
 	groups = {
 		snappy = 3, flammable = 2, plant = 1, attached_node = 1,
@@ -79,6 +81,7 @@ minetest.register_node("farming:coffee_4", table.copy(def))
 -- stage 5 (final)
 def.tiles = {"farming_coffee_5.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	items = {
 		{items = {"farming:coffee_beans 2"}, rarity = 1},
@@ -92,7 +95,33 @@ minetest.register_node("farming:coffee_5", table.copy(def))
 farming.registered_plants["farming:coffee"] = {
 	crop = "farming:coffee",
 	seed = "farming:coffee_beans",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 5
 }
+
+-- mapgen
+local mg = farming.mapgen == "v6"
+
+def = {
+	y_max = mg and 50 or 55,
+	spawn_on = mg and {"default:dirt_with_grass"} or {"default:dirt_with_dry_grass",
+			"default:dirt_with_rainforest_litter", "default:dry_dirt_with_dry_grass"}
+}
+
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = def.spawn_on,
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.coffee,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 12,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 20,
+	y_max = def.y_max,
+	decoration = "farming:coffee_5"
+})

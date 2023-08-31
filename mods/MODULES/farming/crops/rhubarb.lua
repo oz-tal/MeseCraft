@@ -1,5 +1,5 @@
 
-local S = farming.intllib
+local S = farming.translate
 
 -- rhubarb
 minetest.register_craftitem("farming:rhubarb", {
@@ -19,10 +19,12 @@ minetest.register_craftitem("farming:rhubarb_pie", {
 	on_use = minetest.item_eat(6)
 })
 
+local tmp = farming.use_utensils and "farming:baking_tray" or ""
+
 minetest.register_craft({
 	output = "farming:rhubarb_pie",
 	recipe = {
-		{"farming:baking_tray", "group:food_sugar", ""},
+		{tmp, "group:food_sugar", ""},
 		{"group:food_rhubarb", "group:food_rhubarb", "group:food_rhubarb"},
 		{"group:food_wheat", "group:food_wheat", "group:food_wheat"}
 	},
@@ -38,6 +40,7 @@ local def = {
 	walkable = false,
 	buildable_to = true,
 	drop = "",
+	waving = 1,
 	selection_box = farming.select,
 	groups = {
 		snappy = 3, flammable = 2, plant = 1, attached_node = 1,
@@ -45,7 +48,7 @@ local def = {
 	},
 	sounds = default.node_sound_leaves_defaults(),
 	minlight = 10,
-	maxlight = 12,
+	maxlight = 12
 }
 
 -- stage 1
@@ -55,23 +58,51 @@ minetest.register_node("farming:rhubarb_1", table.copy(def))
 def.tiles = {"farming_rhubarb_2.png"}
 minetest.register_node("farming:rhubarb_2", table.copy(def))
 
--- stage 3 (final)
+-- stage3
 def.tiles = {"farming_rhubarb_3.png"}
-def.groups.growing = nil
 def.drop = {
 	items = {
-	{items = {"farming:rhubarb 2"}, rarity = 1},
+		{items = {"farming:rhubarb"}, rarity = 1},
+	}
+}
+minetest.register_node("farming:rhubarb_3", table.copy(def))
+
+-- stage 4 (final)
+def.tiles = {"farming_rhubarb_4.png"}
+def.groups.growing = nil
+def.selection_box = farming.select_final
+def.drop = {
+	items = {
+		{items = {"farming:rhubarb 2"}, rarity = 1},
 		{items = {"farming:rhubarb"}, rarity = 2},
 		{items = {"farming:rhubarb"}, rarity = 3}
 	}
 }
-minetest.register_node("farming:rhubarb_3", table.copy(def))
+minetest.register_node("farming:rhubarb_4", table.copy(def))
 
 -- add to registered_plants
 farming.registered_plants["farming:rhubarb"] = {
 	crop = "farming:rhubarb",
 	seed = "farming:rhubarb",
-	minlight = 13,
-	maxlight = 15,
-	steps = 3
+	minlight = 10,
+	maxlight = 12,
+	steps = 4
 }
+
+-- mapgen
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.rhubarb,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 798,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 3,
+	y_max = 20,
+	decoration = "farming:rhubarb_3"
+})

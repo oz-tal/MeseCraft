@@ -1,5 +1,5 @@
 
-local S = farming.intllib
+local S = farming.translate
 
 -- beetroot
 minetest.register_craftitem("farming:beetroot", {
@@ -21,20 +21,17 @@ minetest.register_craftitem("farming:beetroot_soup", {
 })
 
 minetest.register_craft({
-	type = "shapeless",
 	output = "farming:beetroot_soup",
 	recipe = {
-		"group:food_beetroot", "group:food_beetroot",
-		"group:food_beetroot", "group:food_beetroot",
-		"group:food_beetroot", "group:food_beetroot","group:food_bowl"
+		{"group:food_beetroot", "group:food_beetroot", "group:food_beetroot"},
+		{"group:food_beetroot", "group:food_bowl", "group:food_beetroot"}
 	}
 })
 
 -- red dye
 minetest.register_craft({
-	type = "shapeless",
 	output = "dye:red",
-	recipe = {"group:food_beetroot"}
+	recipe = {{"group:food_beetroot"}}
 })
 
 local def = {
@@ -72,6 +69,7 @@ minetest.register_node("farming:beetroot_4", table.copy(def))
 -- stage 5
 def.tiles = {"farming_beetroot_5.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	max_items = 4, items = {
 		{items = {"farming:beetroot"}, rarity = 1},
@@ -86,7 +84,25 @@ minetest.register_node("farming:beetroot_5", table.copy(def))
 farming.registered_plants["farming:beetroot"] = {
 	crop = "farming:beetroot",
 	seed = "farming:beetroot",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 5
 }
+
+-- mapgen
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.beetroot,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 456,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 1,
+	y_max = 20,
+	decoration = "farming:beetroot_5"
+})

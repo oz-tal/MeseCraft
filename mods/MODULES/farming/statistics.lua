@@ -7,9 +7,9 @@ local ROOT_2 = math.sqrt(2.0)
 local erf
 local erf_inv
 
-local A = 8 * (math.pi - 3.0)/(3.0 * math.pi * (4.0 - math.pi))
+local A = 8 * (math.pi - 3.0) / (3.0 * math.pi * (4.0 - math.pi))
 local B = 4.0 / math.pi
-local C = 2.0/(math.pi * A)
+local C = 2.0 / (math.pi * A)
 local D = 1.0 / A
 
 

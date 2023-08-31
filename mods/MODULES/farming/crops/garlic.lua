@@ -5,9 +5,9 @@
 	https://forum.minetest.net/viewtopic.php?f=9&t=19488
 ]]
 
-local S = farming.intllib
+local S = farming.translate
 
--- potato
+-- garlic clove
 minetest.register_craftitem("farming:garlic_clove", {
 	description = S("Garlic clove"),
 	inventory_image = "crops_garlic_clove.png",
@@ -26,9 +26,8 @@ minetest.register_craftitem("farming:garlic", {
 })
 
 minetest.register_craft({
-	type = "shapeless",
 	output = "farming:garlic_clove 8",
-	recipe = {"farming:garlic"}
+	recipe = {{"farming:garlic"}}
 })
 
 minetest.register_craft({
@@ -46,6 +45,7 @@ minetest.register_node("farming:garlic_braid", {
 	inventory_image = "crops_garlic_braid.png",
 	wield_image = "crops_garlic_braid.png",
 	drawtype = "nodebox",
+	use_texture_alpha = "clip",
 	paramtype = "light",
 	paramtype2 = "facedir",
 	tiles = {
@@ -116,6 +116,7 @@ minetest.register_node("farming:garlic_4", table.copy(def))
 -- stage 5
 def.tiles = {"crops_garlic_plant_5.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	items = {
 		{items = {"farming:garlic 3"}, rarity = 1},
@@ -129,7 +130,27 @@ minetest.register_node("farming:garlic_5", table.copy(def))
 farming.registered_plants["farming:garlic"] = {
 	crop = "farming:garlic",
 	seed = "farming:garlic_clove",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 5
 }
+
+-- mapgen
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.garlic,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 467,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 3,
+	y_max = 35,
+	decoration = "farming:garlic_5",
+	spawn_by = "group:tree",
+	num_spawn_by = 1
+})

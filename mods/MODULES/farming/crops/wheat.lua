@@ -1,5 +1,5 @@
 
-local S = farming.intllib
+local S = farming.translate
 
 -- wheat seeds
 minetest.register_node("farming:seed_wheat", {
@@ -8,14 +8,15 @@ minetest.register_node("farming:seed_wheat", {
 	inventory_image = "farming_wheat_seed.png",
 	wield_image = "farming_wheat_seed.png",
 	drawtype = "signlike",
-	groups = {seed = 1, snappy = 3, attached_node = 1, flammable = 4},
+	groups = {seed = 1, snappy = 3, attached_node = 1, flammable = 4, growing = 1},
 	paramtype = "light",
 	paramtype2 = "wallmounted",
 	walkable = false,
 	sunlight_propagates = true,
 	selection_box = farming.select,
+	next_plant = "farming:wheat_1",
 	on_place = function(itemstack, placer, pointed_thing)
-		return farming.place_seed(itemstack, placer, pointed_thing, "farming:wheat_1")
+		return farming.place_seed(itemstack, placer, pointed_thing, "farming:seed_wheat")
 	end
 })
 
@@ -46,9 +47,7 @@ minetest.register_craft({
 
 minetest.register_craft({
 	output = "farming:wheat 3",
-	recipe = {
-		{"farming:straw"}
-	}
+	recipe = {{"farming:straw"}}
 })
 
 -- check and register stairs
@@ -79,12 +78,13 @@ minetest.register_craftitem("farming:flour", {
 	groups = {food_flour = 1, flammable = 1}
 })
 
+local tmp = farming.use_utensils and "farming:mortar_pestle" or ""
+
 minetest.register_craft({
-	type = "shapeless",
 	output = "farming:flour",
 	recipe = {
-		"farming:wheat", "farming:wheat", "farming:wheat",
-		"farming:wheat", "farming:mortar_pestle"
+		{"farming:wheat", "farming:wheat", "farming:wheat"},
+		{"farming:wheat", tmp, ""}
 	},
 	replacements = {{"group:food_mortar_pestle", "farming:mortar_pestle"}}
 })
@@ -112,10 +112,11 @@ minetest.register_craftitem("farming:bread_slice", {
 	groups = {food_bread_slice = 1, flammable = 2}
 })
 
+tmp = farming.use_utensils and "farming:cutting_board" or ""
+
 minetest.register_craft({
-	type = "shapeless",
 	output = "farming:bread_slice 5",
-	recipe = {"farming:bread", "group:food_cutting_board"},
+	recipe = {{"farming:bread", tmp}},
 	replacements = {{"group:food_cutting_board", "farming:cutting_board"}}
 })
 
@@ -162,6 +163,7 @@ local def = {
 	walkable = false,
 	buildable_to = true,
 	drop = "",
+	waving = 1,
 	selection_box = farming.select,
 	groups = {
 		snappy = 3, flammable = 4, plant = 1, attached_node = 1,
@@ -220,6 +222,7 @@ minetest.register_node("farming:wheat_7", table.copy(def))
 -- stage 8 (final)
 def.tiles = {"farming_wheat_8.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	items = {
 		{items = {"farming:wheat"}, rarity = 1},
@@ -234,8 +237,8 @@ minetest.register_node("farming:wheat_8", table.copy(def))
 farming.registered_plants["farming:wheat"] = {
 	crop = "farming:wheat",
 	seed = "farming:seed_wheat",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 8
 }
 

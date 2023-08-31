@@ -1,5 +1,5 @@
 
-local S = farming.intllib
+local S = farming.translate
 
 -- melon
 minetest.register_craftitem("farming:melon_slice", {
@@ -20,10 +20,11 @@ minetest.register_craft({
 	}
 })
 
+local tmp = farming.use_utensils and "farming:cutting_board" or ""
+
 minetest.register_craft({
-	type = "shapeless",
 	output = "farming:melon_slice 4",
-	recipe = {"farming:melon_8", "farming:cutting_board"},
+	recipe = {{"farming:melon_8", tmp}},
 	replacements = {{"farming:cutting_board", "farming:cutting_board"}}
 })
 
@@ -72,23 +73,58 @@ def.tiles = {"farming_melon_7.png"}
 minetest.register_node("farming:melon_7", table.copy(def))
 
 -- stage 8 (final)
-def.drawtype = "nodebox"
-def.description = S("Melon")
-def.tiles = {"farming_melon_top.png", "farming_melon_top.png", "farming_melon_side.png"}
-def.selection_box = {-.5, -.5, -.5, .5, .5, .5}
-def.walkable = true
-def.groups = {
-	food_melon = 1, snappy = 2, oddly_breakable_by_hand = 1,
-	flammable = 2, plant = 1
-}
-def.drop = "farming:melon_8"
-minetest.register_node("farming:melon_8", table.copy(def))
+minetest.register_node("farming:melon_8", {
+	description = S("Melon"),
+	tiles = {
+		"farming_melon_top.png",
+		"farming_melon_bottom.png",
+		"farming_melon_side.png"
+	},
+	groups = {
+		food_melon = 1, snappy = 3, choppy = 3, oddly_breakable_by_hand = 2,
+		flammable = 2, plant = 1
+	},
+	drop = "farming:melon_8",
+	sounds = default.node_sound_wood_defaults(),
+	paramtype2 = "facedir",
+	on_place = minetest.rotate_node
+})
 
 -- add to registered_plants
 farming.registered_plants["farming:melon"] = {
 	crop = "farming:melon",
 	seed = "farming:melon_slice",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 8
 }
+
+-- mapgen
+local mg = farming.mapgen == "v6"
+
+def = {
+	y_max = mg and 20 or 6,
+	spawn_on = mg and {"default:dirt_with_grass"} or {"default:dirt_with_dry_grass",
+			"default:dirt_with_rainforest_litter"},
+	near = mg and "group:water" or nil,
+	num = mg and 1 or -1,
+}
+
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = def.spawn_on,
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.melon,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 790,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 1,
+	y_max = def.y_max,
+	decoration = "farming:melon_8",
+	spawn_by = def.near,
+	num_spawn_by = def.num
+})

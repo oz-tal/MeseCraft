@@ -1,5 +1,10 @@
 
-local S = farming.intllib
+--[[
+	Textures edited from:
+	http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1288375-food-plus-mod-more-food-than-you-can-imagine-v2-9)
+]]
+
+local S = farming.translate
 
 -- tomato
 minetest.register_craftitem("farming:tomato", {
@@ -12,6 +17,23 @@ minetest.register_craftitem("farming:tomato", {
 	on_use = minetest.item_eat(4)
 })
 
+-- tomato soup
+minetest.register_craftitem("farming:tomato_soup", {
+	description = S("Tomato Soup"),
+	inventory_image = "farming_tomato_soup.png",
+	groups = {flammable = 2},
+	on_use = minetest.item_eat(8, "farming:bowl")
+})
+
+minetest.register_craft({
+	output = "farming:tomato_soup",
+	recipe = {
+		{"group:food_tomato"},
+		{"group:food_tomato"},
+		{"group:food_bowl"}
+	}
+})
+
 -- tomato definition
 local def = {
 	drawtype = "plantlike",
@@ -21,6 +43,7 @@ local def = {
 	walkable = false,
 	buildable_to = true,
 	drop = "",
+	waving = 1,
 	selection_box = farming.select,
 	groups = {
 		snappy = 3, flammable = 2, plant = 1, attached_node = 1,
@@ -65,6 +88,7 @@ minetest.register_node("farming:tomato_7", table.copy(def))
 -- stage 8 (final)
 def.tiles = {"farming_tomato_8.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	items = {
 		{items = {"farming:tomato 3"}, rarity = 1},
@@ -78,7 +102,25 @@ minetest.register_node("farming:tomato_8", table.copy(def))
 farming.registered_plants["farming:tomato"] = {
 	crop = "farming:tomato",
 	seed = "farming:tomato",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 8
 }
+
+-- mapgen
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.tomato,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 365,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 5,
+	y_max = 25,
+	decoration = "farming:tomato_7"
+})

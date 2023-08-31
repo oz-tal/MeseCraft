@@ -1,5 +1,5 @@
 
-local S = farming.intllib
+local S = farming.translate
 
 --= Helpers
 
@@ -15,13 +15,6 @@ minetest.override_item("default:apple", {
 		leafdecay = 3, leafdecay_drop = 1}
 })
 
-if minetest.registered_nodes["flowers:mushroom_brown"] then
-minetest.override_item("flowers:mushroom_brown", {
-	light_source = 1,
-	groups = {food_mushroom = 1, snappy = 3, attached_node = 1, flammable = 2}
-})
-end
-
 --= Aliases
 
 -- Banana
@@ -33,9 +26,9 @@ else
 	minetest.register_node(":ethereal:banana", {
 		description = S("Banana"),
 		drawtype = "torchlike",
-		tiles = {"banana_single.png"},
-		inventory_image = "banana_single.png",
-		wield_image = "banana_single.png",
+		tiles = {"farming_banana_single.png"},
+		inventory_image = "farming_banana_single.png",
+		wield_image = "farming_banana_single.png",
 		paramtype = "light",
 		sunlight_propagates = true,
 		walkable = false,
@@ -50,9 +43,9 @@ else
 
 	minetest.register_node(":ethereal:bananaleaves", {
 		description = S("Banana Leaves"),
-		tiles = {"banana_leaf.png"},
-		inventory_image = "banana_leaf.png",
-		wield_image = "banana_leaf.png",
+		tiles = {"farming_banana_leaf.png"},
+		inventory_image = "farming_banana_leaf.png",
+		wield_image = "farming_banana_leaf.png",
 		paramtype = "light",
 		waving = 1,
 		groups = {snappy = 3, leafdecay = 3, leaves = 1, flammable = 2},
@@ -138,29 +131,12 @@ alias("farming_plus:rhubarb", "farming:rhubarb_3")
 alias("farming_plus:rhubarb_item", "farming:rhubarb")
 
 -- Strawberry
-if eth then
-	alias("farming_plus:strawberry_item", "ethereal:strawberry")
-	alias("farming_plus:strawberry_seed", "ethereal:strawberry")
-	alias("farming_plus:strawberry_1", "ethereal:strawberry_1")
-	alias("farming_plus:strawberry_2", "ethereal:strawberry_3")
-	alias("farming_plus:strawberry_3", "ethereal:strawberry_5")
-	alias("farming_plus:strawberry", "ethereal:strawberry_7")
-else
-	minetest.register_craftitem(":ethereal:strawberry", {
-		description = S("Strawberry"),
-		inventory_image = "strawberry.png",
-		wield_image = "strawberry.png",
-		groups = {food_strawberry = 1, flammable = 2},
-		on_use = minetest.item_eat(1)
-	})
-
-	alias("farming_plus:strawberry_item", "ethereal:strawberry")
-	alias("farming_plus:strawberry_seed", "ethereal:strawberry")
-	alias("farming_plus:strawberry_1", "farming:raspberry_1")
-	alias("farming_plus:strawberry_2", "farming:raspberry_2")
-	alias("farming_plus:strawberry_3", "farming:raspberry_3")
-	alias("farming_plus:strawberry", "farming:raspberry_4")
-end
+alias("farming_plus:strawberry_item", "ethereal:strawberry")
+alias("farming_plus:strawberry_seed", "ethereal:strawberry")
+alias("farming_plus:strawberry_1", "ethereal:strawberry_1")
+alias("farming_plus:strawberry_2", "ethereal:strawberry_3")
+alias("farming_plus:strawberry_3", "ethereal:strawberry_5")
+alias("farming_plus:strawberry", "ethereal:strawberry_7")
 
 -- Tomato
 alias("farming_plus:tomato_seed", "farming:tomato")

@@ -5,7 +5,7 @@
 	https://forum.minetest.net/viewtopic.php?f=9&t=19488
 ]]
 
-local S = farming.intllib
+local S = farming.translate
 
 -- peppercorn (seed)
 minetest.register_craftitem("farming:peppercorn", {
@@ -19,16 +19,31 @@ minetest.register_craftitem("farming:peppercorn", {
 
 -- green pepper
 minetest.register_craftitem("farming:pepper", {
-	description = S("Pepper"),
+	description = S("Green Pepper"),
 	inventory_image = "crops_pepper.png",
 	on_use = minetest.item_eat(2),
 	groups = {food_pepper = 1, flammable = 3}
 })
 
+-- yellow pepper
+minetest.register_craftitem("farming:pepper_yellow", {
+	description = S("Yellow Pepper"),
+	inventory_image = "crops_pepper_yellow.png",
+	on_use = minetest.item_eat(3),
+	groups = {food_pepper = 1, flammable = 3}
+})
+
+-- red pepper
+minetest.register_craftitem("farming:pepper_red", {
+	description = S("Red Pepper"),
+	inventory_image = "crops_pepper_red.png",
+	on_use = minetest.item_eat(4),
+	groups = {food_pepper = 1, flammable = 3}
+})
+
 minetest.register_craft({
-	type = "shapeless",
 	output = "farming:peppercorn",
-	recipe = {"farming:pepper"}
+	recipe = {{"group:food_pepper"}}
 })
 
 -- ground pepper
@@ -51,10 +66,15 @@ minetest.register_node("farming:pepper_ground", {
 	}
 })
 
+local tmp = farming.use_utensils and "farming:mortar_pestle" or ""
+
 minetest.register_craft( {
 	output = "farming:pepper_ground",
-	type = "shapeless",
-	recipe = {"group:food_peppercorn", "vessels:glass_bottle", "farming:mortar_pestle"},
+	recipe = {
+		{"group:food_peppercorn"},
+		{"vessels:glass_bottle"},
+		{tmp}
+	},
 	replacements = {{"group:food_mortar_pestle", "farming:mortar_pestle"}}
 })
 
@@ -93,11 +113,11 @@ minetest.register_node("farming:pepper_3", table.copy(def))
 def.tiles = {"crops_pepper_plant_4.png"}
 minetest.register_node("farming:pepper_4", table.copy(def))
 
--- stage 5
+-- stage 5 (green pepper)
 def.tiles = {"crops_pepper_plant_5.png"}
-def.groups.growing = 0
+def.selection_box = farming.select_final
 def.drop = {
-	items = {
+	max_items = 2, items = {
 		{items = {"farming:pepper 2"}, rarity = 1},
 		{items = {"farming:pepper"}, rarity = 2},
 		{items = {"farming:pepper"}, rarity = 3}
@@ -105,11 +125,60 @@ def.drop = {
 }
 minetest.register_node("farming:pepper_5", table.copy(def))
 
+-- stage 6 (yellow pepper)
+def.tiles = {"crops_pepper_plant_6.png"}
+def.drop = {
+	max_items = 2, items = {
+		{items = {"farming:pepper_yellow 2"}, rarity = 1},
+		{items = {"farming:pepper_yellow"}, rarity = 2},
+		{items = {"farming:pepper_yellow"}, rarity = 3}
+	}
+}
+minetest.register_node("farming:pepper_6", table.copy(def))
+
+-- stage 7 (red pepper)
+def.tiles = {"crops_pepper_plant_7.png"}
+def.groups.growing = nil
+def.drop = {
+	max_items = 2, items = {
+		{items = {"farming:pepper_red 2"}, rarity = 1},
+		{items = {"farming:pepper_red"}, rarity = 2},
+		{items = {"farming:pepper_red"}, rarity = 3}
+	}
+}
+minetest.register_node("farming:pepper_7", table.copy(def))
+
 -- add to registered_plants
 farming.registered_plants["farming:pepper"] = {
 	crop = "farming:pepper",
 	seed = "farming:peppercorn",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 5
 }
+
+-- mapgen
+local mg = farming.mapgen == "v6"
+
+def = {
+	grow_on = mg and {"default:dirt_with_grass"} or {"default:dirt_with_rainforest_litter"}
+}
+
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = def.grow_on,
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.pepper,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 243,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 5,
+	y_max = 35,
+	decoration = {"farming:pepper_5", "farming:pepper_6", "farming:pepper_7"},
+	spawn_by = "group:tree",
+	num_spawn_by = 1
+})

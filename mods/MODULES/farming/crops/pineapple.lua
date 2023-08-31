@@ -1,5 +1,5 @@
 
-local S = farming.intllib
+local S = farming.translate
 
 -- pineapple top
 minetest.register_craftitem("farming:pineapple_top", {
@@ -38,8 +38,7 @@ minetest.register_craftitem("farming:pineapple_ring", {
 
 minetest.register_craft( {
 	output = "farming:pineapple_ring 5",
-	type = "shapeless",
-	recipe = {"group:food_pineapple"},
+	recipe = {{"group:food_pineapple"}},
 	replacements = {{"farming:pineapple", "farming:pineapple_top"}}
 })
 
@@ -51,13 +50,16 @@ minetest.register_craftitem("farming:pineapple_juice", {
 	groups = {vessel = 1, drink = 1}
 })
 
+local tmp = farming.use_utensils and "farming:juicer" or ""
+
 minetest.register_craft({
 	output = "farming:pineapple_juice",
-	type = "shapeless",
 	recipe = {
-		"vessels:drinking_glass", "group:food_pineapple_ring",
-		"group:food_pineapple_ring", "group:food_pineapple_ring",
-		"farming:juicer"},
+		{"group:food_pineapple_ring", "group:food_pineapple_ring",
+				"group:food_pineapple_ring"},
+		{"", "vessels:drinking_glass", ""},
+		{"", tmp, ""}
+	},
 	replacements = {
 		{"group:food_juicer", "farming:juicer"}
 	}
@@ -65,10 +67,10 @@ minetest.register_craft({
 
 minetest.register_craft({
 	output = "farming:pineapple_juice 2",
-	type = "shapeless",
 	recipe = {
-		"vessels:drinking_glass", "vessels:drinking_glass",
-		"group:food_pineapple", "farming:juicer"
+		{"group:food_pineapple", ""},
+		{"vessels:drinking_glass", "vessels:drinking_glass"},
+		{tmp, ""}
 	},
 	replacements = {
 		{"group:food_juicer", "farming:juicer"}
@@ -85,6 +87,7 @@ local def = {
 	walkable = false,
 	buildable_to = true,
 	drop = "",
+	waving = 1,
 	selection_box = farming.select,
 	groups = {
 		snappy = 3, flammable = 2, plant = 1, attached_node = 1,
@@ -123,10 +126,11 @@ minetest.register_node("farming:pineapple_7", table.copy(def))
 -- stage 8 (final)
 def.tiles = {"farming_pineapple_8.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	items = {
 		{items = {"farming:pineapple"}, rarity = 1},
-		{items = {"farming:pineapple"}, rarity = 10}
+		{items = {"farming:pineapple"}, rarity = 2}
 	}
 }
 minetest.register_node("farming:pineapple_8", table.copy(def))
@@ -135,7 +139,36 @@ minetest.register_node("farming:pineapple_8", table.copy(def))
 farming.registered_plants["farming:pineapple"] = {
 	crop = "farming:pineapple",
 	seed = "farming:pineapple_top",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 8
 }
+
+-- mapgen
+local mg = farming.mapgen == "v6"
+
+def = {
+	grow_on = mg and {"default:dirt_with_grass"} or {"default:dirt_with_dry_grass",
+			"default:dry_dirt_with_dry_grass"},
+	grow_near = mg and "group:sand" or nil,
+	num = mg and 1 or -1
+}
+
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = def.grow_on,
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.pineapple,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 354,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 11,
+	y_max = 30,
+	decoration = {"farming:pineapple_8"},
+	spawn_by = def.grow_near,
+	num_spawn_by = def.num
+})

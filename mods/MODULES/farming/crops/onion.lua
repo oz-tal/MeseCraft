@@ -5,7 +5,7 @@
 	https://forum.minetest.net/viewtopic.php?f=9&t=19488
 ]]
 
-local S = farming.intllib
+local S = farming.translate
 
 -- onion
 minetest.register_craftitem("farming:onion", {
@@ -26,15 +26,22 @@ minetest.register_craftitem("farming:onion_soup", {
 	on_use = minetest.item_eat(6, "farming:bowl")
 })
 
+local tmp = farming.use_utensils and "farming:pot" or ""
+
 minetest.register_craft({
-	type = "shapeless",
 	output = "farming:onion_soup",
 	recipe = {
-		"group:food_onion", "group:food_onion", "group:food_pot",
-		"group:food_onion", "group:food_onion",
-		"group:food_onion", "group:food_onion", "group:food_bowl"
+		{"group:food_onion", "group:food_onion", "group:food_onion"},
+		{"group:food_onion", "group:food_bowl", "group:food_onion"},
+		{"", tmp, ""}
 	},
 	replacements = {{"farming:pot", "farming:pot"}}
+})
+
+-- yellow dye
+minetest.register_craft({
+	output = "dye:yellow",
+	recipe = {{"group:food_onion"}}
 })
 
 -- crop definition
@@ -49,6 +56,7 @@ local def = {
 	walkable = false,
 	buildable_to = true,
 	drop = "",
+	waving = 1,
 	selection_box = farming.select,
 	groups = {
 		snappy = 3, flammable = 3, plant = 1, attached_node = 1,
@@ -75,13 +83,14 @@ minetest.register_node("farming:onion_4", table.copy(def))
 -- stage 5
 def.tiles = {"crops_onion_plant_5.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	max_items = 5, items = {
 		{items = {"farming:onion"}, rarity = 1},
 		{items = {"farming:onion"}, rarity = 1},
 		{items = {"farming:onion"}, rarity = 2},
 		{items = {"farming:onion"}, rarity = 2},
-		{items = {"farming:onion"}, rarity = 5},
+		{items = {"farming:onion"}, rarity = 5}
 	}
 }
 minetest.register_node("farming:onion_5", table.copy(def))
@@ -90,7 +99,25 @@ minetest.register_node("farming:onion_5", table.copy(def))
 farming.registered_plants["farming:onion"] = {
 	crop = "farming:onion",
 	seed = "farming:onion",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 5
 }
+
+-- mapgen
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.onion,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 912,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 5,
+	y_max = 28,
+	decoration = "farming:onion_5"
+})

@@ -4,7 +4,7 @@
 	https://forum.minetest.net/viewtopic.php?id=3948
 ]]
 
-local S = farming.intllib
+local S = farming.translate
 
 -- cucumber
 minetest.register_craftitem("farming:cucumber", {
@@ -47,6 +47,7 @@ minetest.register_node("farming:cucumber_3", table.copy(def))
 -- stage 4 (final)
 def.tiles = {"farming_cucumber_4.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	items = {
 		{items = {"farming:cucumber 2"}, rarity = 1},
@@ -59,7 +60,34 @@ minetest.register_node("farming:cucumber_4", table.copy(def))
 farming.registered_plants["farming:cucumber"] = {
 	crop = "farming:cucumber",
 	seed = "farming:cucumber",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 4
 }
+
+-- mapgen
+local mg = farming.mapgen == "v6"
+
+def = {
+	near = mg and "group:water" or nil,
+	num = mg and 1 or -1,
+}
+
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.cucumber,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 245,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 1,
+	y_max = 20,
+	decoration = "farming:cucumber_4",
+	spawn_by = def.near,
+	num_spawn_by = def.num
+})

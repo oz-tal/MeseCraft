@@ -1,5 +1,5 @@
 
-local S = farming.intllib
+local S = farming.translate
 
 -- wild cotton as a source of cotton seed and a chance of cotton itself
 minetest.register_node("farming:cotton_wild", {
@@ -34,14 +34,15 @@ minetest.register_node("farming:seed_cotton", {
 	inventory_image = "farming_cotton_seed.png",
 	wield_image = "farming_cotton_seed.png",
 	drawtype = "signlike",
-	groups = {seed = 1, snappy = 3, attached_node = 1, flammable = 4},
+	groups = {seed = 1, snappy = 3, attached_node = 1, flammable = 4, growing = 1},
 	paramtype = "light",
 	paramtype2 = "wallmounted",
 	walkable = false,
 	sunlight_propagates = true,
 	selection_box = farming.select,
+	next_plant = "farming:cotton_1",
 	on_place = function(itemstack, placer, pointed_thing)
-		return farming.place_seed(itemstack, placer, pointed_thing, "farming:cotton_1")
+		return farming.place_seed(itemstack, placer, pointed_thing, "farming:seed_cotton")
 	end
 })
 
@@ -99,6 +100,7 @@ local def = {
 	walkable = false,
 	buildable_to = true,
 	drop =  "",
+	waving = 1,
 	selection_box = farming.select,
 	groups = {
 		snappy = 3, flammable = 4, plant = 1, attached_node = 1,
@@ -156,6 +158,7 @@ minetest.register_node("farming:cotton_7", table.copy(def))
 -- stage 8 (final)
 def.tiles = {"farming_cotton_8.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	items = {
 		{items = {"farming:cotton"}, rarity = 1},
@@ -172,8 +175,8 @@ minetest.register_node("farming:cotton_8", table.copy(def))
 farming.registered_plants["farming:cotton"] = {
 	crop = "farming:cotton",
 	seed = "farming:seed_cotton",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 8
 }
 
@@ -184,3 +187,30 @@ farming.register_plant("farming:cotton", {
 	groups = {flammable = 2},
 	steps = 8,
 })]]
+
+-- mapgen
+local mg = farming.mapgen == "v6"
+
+def = {
+	grow_on = mg and {"default:dirt_with_grass"} or {"default:dry_dirt_with_dry_grass"},
+	biome = mg and {"jungle"} or {"savanna"}
+}
+
+minetest.register_decoration({
+	name = "farming:cotton_wild",
+	deco_type = "simple",
+	place_on = def.grow_on,
+	sidelen = 16,
+	noise_params = {
+		offset = -0.1,
+		scale = 0.1,
+		spread = {x = 50, y = 50, z = 50},
+		seed = 4242,
+		octaves = 3,
+		persist = 0.7
+	},
+	biomes = def.biome,
+	y_max = 31000,
+	y_min = 1,
+	decoration = "farming:cotton_wild"
+})

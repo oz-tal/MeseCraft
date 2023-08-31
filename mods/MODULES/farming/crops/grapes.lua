@@ -1,5 +1,5 @@
 
-local S = farming.intllib
+local S = farming.translate
 
 -- place trellis
 local function place_grapes(itemstack, placer, pointed_thing, plantname)
@@ -22,7 +22,7 @@ local function place_grapes(itemstack, placer, pointed_thing, plantname)
 	-- thanks to Krock for helping with this issue :)
 	local def = minetest.registered_nodes[under.name]
 	if placer and itemstack and def and def.on_rightclick then
-		return def.on_rightclick(pt.under, under, placer, itemstack)
+		return def.on_rightclick(pt.under, under, placer, itemstack, pt)
 	end
 
 	-- is player planting seed?
@@ -76,9 +76,7 @@ minetest.register_craftitem("farming:grapes", {
 -- grapes can be used for violet dye
 minetest.register_craft({
 	output = "dye:violet",
-	recipe = {
-		{"farming:grapes"}
-	}
+	recipe = {{"farming:grapes"}}
 })
 
 -- trellis
@@ -117,7 +115,7 @@ minetest.register_node("farming:trellis", {
 		-- thanks to Krock for helping with this issue :)
 		local def = minetest.registered_nodes[under.name]
 		if def and def.on_rightclick then
-			return def.on_rightclick(pt.under, under, placer, itemstack)
+			return def.on_rightclick(pt.under, under, placer, itemstack, pt)
 		end
 
 		if minetest.is_protected(pt.above, placer:get_player_name()) then
@@ -219,6 +217,7 @@ minetest.register_node("farming:grapes_7", table.copy(def))
 -- stage 8 (final)
 def.tiles = {"farming_grapes_8.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	items = {
 		{items = {"farming:trellis"}, rarity = 1},
@@ -231,10 +230,11 @@ minetest.register_node("farming:grapes_8", table.copy(def))
 
 -- add to registered_plants
 farming.registered_plants["farming:grapes"] = {
+	trellis = "farming:trellis",
 	crop = "farming:grapes",
 	seed = "farming:grapes",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 8
 }
 
@@ -260,4 +260,22 @@ minetest.register_node("farming:grapebush", {
 		not_in_creative_inventory = 1
 	},
 	sounds = default.node_sound_leaves_defaults()
+})
+
+-- mapgen
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.grapes,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 578,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 25,
+	y_max = 50,
+	decoration = "farming:grapebush"
 })

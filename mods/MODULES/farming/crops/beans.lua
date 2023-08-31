@@ -4,7 +4,7 @@
 	CC-BY-SA-3.0
 ]]
 
-local S = farming.intllib
+local S = farming.translate
 
 -- place beans
 local function place_beans(itemstack, placer, pointed_thing, plantname)
@@ -27,7 +27,7 @@ local function place_beans(itemstack, placer, pointed_thing, plantname)
 	-- thanks to Krock for helping with this issue :)
 	local def = minetest.registered_nodes[under.name]
 	if placer and itemstack and def and def.on_rightclick then
-		return def.on_rightclick(pt.under, under, placer, itemstack)
+		return def.on_rightclick(pt.under, under, placer, itemstack, pt)
 	end
 
 	-- is player planting crop?
@@ -81,9 +81,7 @@ minetest.register_craftitem("farming:beans", {
 -- beans can be used for green dye
 minetest.register_craft({
 	output = "dye:green",
-	recipe = {
-		{"farming:beans"}
-	}
+	recipe = {{"farming:beans"}}
 })
 
 -- beanpole
@@ -122,7 +120,7 @@ minetest.register_node("farming:beanpole", {
 		-- thanks to Krock for helping with this issue :)
 		local def = minetest.registered_nodes[under.name]
 		if def and def.on_rightclick then
-			return def.on_rightclick(pt.under, under, placer, itemstack)
+			return def.on_rightclick(pt.under, under, placer, itemstack, pt)
 		end
 
 		if minetest.is_protected(pt.above, placer:get_player_name()) then
@@ -212,6 +210,7 @@ minetest.register_node("farming:beanpole_4", table.copy(def))
 -- stage 5 (final)
 def.tiles = {"farming_beanpole_5.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	items = {
 		{items = {"farming:beanpole"}, rarity = 1},
@@ -224,10 +223,11 @@ minetest.register_node("farming:beanpole_5", table.copy(def))
 
 -- add to registered_plants
 farming.registered_plants["farming:beans"] = {
+	trellis = "farming:beanpole",
 	crop = "farming:beanpole",
 	seed = "farming:beans",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 5
 }
 
@@ -253,4 +253,22 @@ minetest.register_node("farming:beanbush", {
 		not_in_creative_inventory = 1
 	},
 	sounds = default.node_sound_leaves_defaults()
+})
+
+-- mapgen
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.beans,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 345,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 18,
+	y_max = 38,
+	decoration = "farming:beanbush"
 })

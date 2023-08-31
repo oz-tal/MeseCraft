@@ -23,6 +23,10 @@ THE SOFTWARE.
 
 License of media (textures):
 ----------------------------
+
+Created by Shadall (CC0):
+  farming_burger.png
+
 Created by PilzAdam (License: CC BY 3.0):
   farming_bread.png
   farming_soil.png
@@ -62,6 +66,16 @@ Created by VanessaE (License: CC BY 3.0):
   farming_cotton_6.png
   farming_cotton_7.png
   farming_cotton_8.png
+
+Created by alerikaisattera (License: CC-BY-SA 4.0)
+  farming_melon_top.png
+  farming_melon_side.png
+  farming_melon_bottom.png
+  farming_pumpkin_bottom.png
+  farming_pumpkin_top.png
+  farming_pumpkin_side.png
+  farming_pumpkin_face_on.png
+  farming_pumpkin_face_off.png
 
 Created by Doc (License: CC BY 3.0):
   farming_cucumber.png
@@ -103,7 +117,7 @@ Created by JoseTheCrafter and edited by TenPlus1 (CC BY 3.0):
   farming_tomato_7.png
   farming_tomato_8.png
 
-edited by TenPlus1 (CC BY 3.0):
+Created by GeMinecraft and edited by TenPlus1 (CC BY 3.0):
   farming_corn.png
   farming_corn_cob.png
   farming_corn_1.png
@@ -126,8 +140,9 @@ Created by TenPlus1 (CC BY 3.0)
   farming_rhubarb_2.png
   farming_rhubarb_3.png
   farming_rhubarb.png
-  farming_rhubarb_pie.png
   farming_hemp*.png
+  farming_tofu*.png
+  farming_gingerbread_man.png
 
 Created by ademant (CC-BY-3.0)
   farming_rye*.png
@@ -142,3 +157,64 @@ Created by VanessaE and edited by SpaghettiToastBook (CC0):
 
 Created by mDiyo (Natura), modified by TenPlus1 (License: CC BY-SA 3.0):
   farming_barley.png
+
+Created by OgelGames (CC BY-SA 4.0)
+  farming_berry_smoothie.png
+  farming_cactus_juice.png
+  farming_salad.png
+
+Created by Felfa (CC0)
+  farming_blackberry*.png
+  farming_lettuce*.png
+  farming_soy*.png
+  farming_vanilla*.png
+  farming_artichoke*.png
+  farming_parsley*.png
+  farming_paella.png
+  farming_potato_omelette.png
+  farming_spanish_potatoes.png
+  farming_vanilla_flan.png
+  farming_sunflower*.png
+  farming_mayo.png
+
+Created by gorlock (CC0)
+  farming_salt_crystal.png
+
+Created by sirrobzeroone (CC0)
+  farming_gyoza.png
+  farming_pineapple_ring.png
+
+Created by smoke_th (CC0 - https://opengameart.org/content/popcorn-icon)
+  farming_popcorn.png
+
+Created by DMBuce (MIT - https://github.com/DMBuce/hatchling-snacks)
+  farming_mac_and_cheese.png
+
+Created by XSSheep (CC BY-SA 4.0 - https://minecraft.curseforge.com/projects/pixel-perfection-freshly-updated)
+  farming_coffee_1.png
+  farming_coffee_2.png
+  farming_coffee_3.png
+  farming_coffee_4.png
+  farming_coffee_5.png
+  farming_coffee_beans.png
+  farming_apple_pie.png (edited by TenPlus1)
+  farming_blueberry_pie.png (edited by TenPlus1)
+  farming_rhubarb_pie.png (edited by TenPlus1)
+
+Copyright (C) 2021-2022: Atlante - AFL-1.1
+License for code: AFL-1.1
+
+Attribution — You must give appropriate credit, provide a link to the license, and
+indicate if changes were made. You may do so in any reasonable manner, but not in any way
+that suggests the licensor endorses you or your use.
+
+ShareAlike — If you remix, transform, or build upon the material, you must distribute
+your contributions under the same license as the original.
+
+Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+  farming_asparagus*
+  farming_eggplant*
+  farming_spinach*
+  farming_ginger*

@@ -1,5 +1,5 @@
 
-local S = farming.intllib
+local S = farming.translate
 
 -- Textures for Pea crop and Peas were done by Andrey01
 
@@ -7,24 +7,15 @@ local S = farming.intllib
 minetest.register_craftitem("farming:pea_pod", {
 	description = S("Pea Pod"),
 	inventory_image = "farming_pea_pod.png",
-	groups = {seed = 2, food_pea_pod = 1, flammable = 2},
+	groups = {seed = 2, food_peas = 1, food_pea_pod = 1, flammable = 2},
 	on_place = function(itemstack, placer, pointed_thing)
 		return farming.place_seed(itemstack, placer, pointed_thing, "farming:pea_1")
-	end
-})
-
-minetest.register_craftitem("farming:peas", {
-	description = S("Peas"),
-	inventory_image = "farming_pea_peas.png",
-	groups = {food_peas = 1, flammable = 2},
+	end,
 	on_use = minetest.item_eat(1)
 })
 
-minetest.register_craft({
-	type = "shapeless",
-	output = "farming:peas",
-	recipe = {"farming:pea_pod"}
-})
+-- replacement for separate peas item that was removed
+minetest.register_alias("farming:peas", "farming:pea_pod")
 
 -- pea soup
 minetest.register_craftitem("farming:pea_soup", {
@@ -35,9 +26,12 @@ minetest.register_craftitem("farming:pea_soup", {
 })
 
 minetest.register_craft({
-	type = "shapeless",
 	output = "farming:pea_soup",
-	recipe = {"group:food_peas", "group:food_peas", "group:food_bowl"}
+	recipe = {
+		{"group:food_peas"},
+		{"group:food_peas"},
+		{"group:food_bowl"}
+	}
 })
 
 local def = {
@@ -77,6 +71,7 @@ minetest.register_node("farming:pea_4", table.copy(def))
 -- stage 5
 def.tiles = {"farming_pea_5.png"}
 def.groups.growing = nil
+def.selection_box = farming.select_final
 def.drop = {
 	max_items = 5, items = {
 		{items = {"farming:pea_pod"}, rarity = 1},
@@ -91,7 +86,25 @@ minetest.register_node("farming:pea_5", table.copy(def))
 farming.registered_plants["farming:pea_pod"] = {
 	crop = "farming:pea",
 	seed = "farming:pea_pod",
-	minlight = 13,
-	maxlight = 15,
+	minlight = farming.min_light,
+	maxlight = farming.max_light,
 	steps = 5
 }
+
+-- mapgen
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 16,
+	noise_params = {
+		offset = 0,
+		scale = farming.peas,
+		spread = {x = 100, y = 100, z = 100},
+		seed = 132,
+		octaves = 3,
+		persist = 0.6
+	},
+	y_min = 25,
+	y_max = 55,
+	decoration = "farming:pea_5"
+})
