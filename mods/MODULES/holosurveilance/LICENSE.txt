@@ -1,0 +1,11 @@
+License for Code
+----------------
+
+All code written by RisingLeaf (CC BY-SA 4.0)
+
+License for Media
+-----------------
+
+Files:
+ textures/*
+Author: RisingLeaf(https://github.com/RisingLeaf)
