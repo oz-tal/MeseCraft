@@ -1,3 +1,70 @@
+-- The crop act as a stem to grow the last stage in one the open spot around it.
+-- The timer stay alive to grow another crop once the current one (if any) is cleared.
+function farming.gourd_growth(pos, next_stage, growth)
+  local stages = farming.plant_stages[next_stage]
+  local p2 = minetest.registered_nodes[next_stage].place_param2 or 1
+
+  if #stages.stages_left ~= 0 then -- Grow the stem
+    minetest.swap_node(pos, {name = next_stage, param2 = p2})
+    return growth
+  else -- Place a crop
+    local neighbors_offsets = {
+      { x = -1, y = 0, z = 0 },
+      { x = 1, y = 0, z = 0 },
+      { x = 0, y = 0, z = -1 },
+      { x = 0, y = 0, z = 1 },
+    }
+
+    -- Check if a crop is already present
+    for n = 1, #neighbors_offsets do
+      local block_pos = vector.add(pos, neighbors_offsets[n])
+      local block = minetest.get_node(block_pos)
+        if block.name == next_stage then
+          return 0
+        end
+    end
+
+    -- Shuffle neighbors to randomize the first valid spot found.
+    for i = #neighbors_offsets, 2, -1 do
+      local j = math.random(i)
+      neighbors_offsets[i], neighbors_offsets[j] = neighbors_offsets[j], neighbors_offsets[i]
+    end
+
+    -- Slow down the spawning chance to 1/8 to balance the output of a stem with other crops.
+    if math.random(8) ~= 1 then
+      return 0
+    end
+
+    for i = 1, #neighbors_offsets do
+      local crop_pos = vector.add(pos, neighbors_offsets[i])
+      local target_block = minetest.get_node(crop_pos)
+
+      if target_block.name == "air" then
+        local floor_pos = vector.add(crop_pos, { x = 0, y = -1, z = 0 })
+        local floor_block = minetest.get_node(floor_pos)
+
+        -- There's probably a better way then this to test if the node is solid
+        if minetest.get_item_group(floor_block.name, "soil") > 0
+        or minetest.get_item_group(floor_block.name, "sand") > 0
+        or minetest.get_item_group(floor_block.name, "crumbly") > 0 
+        or minetest.get_item_group(floor_block.name, "cracky") > 0
+        or minetest.get_item_group(floor_block.name, "choppy") > 0 then
+          minetest.set_node(crop_pos, {name = next_stage, param2 = p2})
+          return 0
+        end
+      end
+    end
+  end
+
+  return 0
+end
+
+-- 
+-- 
+-- 
+-- 
+-- 
+
 
 local S = farming.translate
 
@@ -154,7 +221,8 @@ local def = {
 		handy = 1, snappy = 3, flammable = 2, plant = 1, attached_node = 1,
 		not_in_creative_inventory = 1, growing = 1
 	},
-	sounds = farming.sounds.node_sound_leaves_defaults()
+	sounds = farming.sounds.node_sound_leaves_defaults(),
+	on_grow = farming.gourd_growth
 }
 
 -- stage 1
@@ -199,7 +267,8 @@ minetest.register_node("farming:pumpkin_8", {
 	drop = "farming:pumpkin_8",
 	sounds = farming.sounds.node_sound_wood_defaults(),
 	paramtype2 = "facedir",
-	on_place = minetest.rotate_node
+	on_place = minetest.rotate_node,
+	on_grow = farming.gourd_growth
 })
 
 minetest.register_alias("farming:pumpkin", "farming:pumpkin_8")
