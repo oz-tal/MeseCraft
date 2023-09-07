@@ -63,3 +63,7 @@ end
 if minetest.get_modpath("pigiron") then
 		ingots.register_ingots("pigiron:iron_ingot", "ingot_pig_iron.png", conf.is_big)
 end
+
+if minetest.get_modpath("nether") then
+		ingots.register_ingots("nether:nether_ingot", "ingot_nether.png", conf.is_big)
+end
