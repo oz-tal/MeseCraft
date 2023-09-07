@@ -1,5 +1,6 @@
 
 local S = farming.translate
+local a = farming.recipe_items
 
 -- wild cotton as a source of cotton seed and a chance of cotton itself
 minetest.register_node("farming:cotton_wild", {
@@ -13,7 +14,7 @@ minetest.register_node("farming:cotton_wild", {
 	sunlight_propagates = true,
 	walkable = false,
 	buildable_to = true,
-	groups = {handy = 1, snappy = 3, attached_node = 1, flammable = 4},
+	groups = {handy = 1, snappy = 3, attached_node = 1, flammable = 4, compostability = 60},
 	drop = {
 		items = {
 			{items = {"farming:cotton"}, rarity = 2},
@@ -35,7 +36,7 @@ minetest.register_node("farming:seed_cotton", {
 	wield_image = "farming_cotton_seed.png",
 	drawtype = "signlike",
 	groups = {
-		compostability = 65, seed = 1, snappy = 3, attached_node = 1,
+		compostability = 48, seed = 1, snappy = 3, attached_node = 1,
 		flammable = 4, growing = 1
 	},
 	paramtype = "light",
@@ -53,19 +54,22 @@ minetest.register_node("farming:seed_cotton", {
 minetest.register_craftitem("farming:cotton", {
 	description = S("Cotton"),
 	inventory_image = "farming_cotton.png",
-	groups = {flammable = 4}
+	groups = {flammable = 4, compostability = 50}
 })
 
 -- string
-minetest.register_craftitem("farming:string", {
-	description = S("String"),
-	inventory_image = "farming_string.png",
-	groups = {flammable = 2}
-})
+if not farming.mcl then
+
+	minetest.register_craftitem("farming:string", {
+		description = S("String"),
+		inventory_image = "farming_string.png",
+		groups = {flammable = 2}
+	})
+end
 
 -- cotton to wool
 minetest.register_craft({
-	output = "wool:white",
+	output = a.wool,
 	recipe = {
 		{"farming:cotton", "farming:cotton"},
 		{"farming:cotton", "farming:cotton"}
@@ -74,7 +78,7 @@ minetest.register_craft({
 
 -- cotton to string
 minetest.register_craft({
-	output = "farming:string 2",
+	output = a.string .. " 2",
 	recipe = {
 		{"farming:cotton"},
 		{"farming:cotton"}
@@ -195,7 +199,8 @@ farming.register_plant("farming:cotton", {
 local mg = farming.mapgen == "v6"
 
 def = {
-	grow_on = mg and {"default:dirt_with_grass"} or {"default:dry_dirt_with_dry_grass"},
+	grow_on = mg and {"default:dirt_with_grass"} or {"default:dry_dirt_with_dry_grass",
+			"mcl_core:dirt_with_grass"},
 	biome = mg and {"jungle"} or {"savanna"}
 }
 

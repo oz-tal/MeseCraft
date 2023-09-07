@@ -1,11 +1,12 @@
 
 local S = farming.translate
+local a = farming.recipe_items
 
 -- pineapple top
 minetest.register_craftitem("farming:pineapple_top", {
 	description = S("Pineapple Top"),
 	inventory_image = "farming_pineapple_top.png",
-	groups = {compostability = 65, seed = 2, flammable = 2},
+	groups = {compostability = 48, seed = 2, flammable = 2},
 	on_place = function(itemstack, placer, pointed_thing)
 		return farming.place_seed(itemstack, placer, pointed_thing, "farming:pineapple_1")
 	end
@@ -25,14 +26,17 @@ minetest.register_node("farming:pineapple", {
 		type = "fixed",
 		fixed = {-0.27, -0.37, -0.27, 0.27, 0.44, 0.27}
 	},
-	groups = {food_pineapple = 1, fleshy = 3, dig_immediate = 3, flammable = 2}
+	groups = {
+		food_pineapple = 1, fleshy = 3, dig_immediate = 3, flammable = 2,
+		compostability = 65
+	}
 })
 
 -- pineapple
 minetest.register_craftitem("farming:pineapple_ring", {
 	description = S("Pineapple Ring"),
 	inventory_image = "farming_pineapple_ring.png",
-	groups = {food_pineapple_ring = 1, flammable = 2},
+	groups = {food_pineapple_ring = 1, flammable = 2, compostability = 45},
 	on_use = minetest.item_eat(1)
 })
 
@@ -47,18 +51,16 @@ minetest.register_craftitem("farming:pineapple_juice", {
 	description = S("Pineapple Juice"),
 	inventory_image = "farming_pineapple_juice.png",
 	on_use = minetest.item_eat(4, "vessels:drinking_glass"),
-	groups = {vessel = 1, drink = 1}
+	groups = {vessel = 1, drink = 1, compostability = 35}
 })
-
-local tmp = farming.use_utensils and "farming:juicer" or ""
 
 minetest.register_craft({
 	output = "farming:pineapple_juice",
 	recipe = {
 		{"group:food_pineapple_ring", "group:food_pineapple_ring",
 				"group:food_pineapple_ring"},
-		{"", "vessels:drinking_glass", ""},
-		{"", tmp, ""}
+		{"", a.drinking_glass, ""},
+		{"", a.juicer, ""}
 	},
 	replacements = {
 		{"group:food_juicer", "farming:juicer"}
@@ -68,9 +70,8 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "farming:pineapple_juice 2",
 	recipe = {
-		{"group:food_pineapple", ""},
-		{"vessels:drinking_glass", "vessels:drinking_glass"},
-		{tmp, ""}
+		{a.drinking_glass, "group:food_pineapple", a.drinking_glass},
+		{"", a.juicer, ""}
 	},
 	replacements = {
 		{"group:food_juicer", "farming:juicer"}
@@ -149,7 +150,7 @@ local mg = farming.mapgen == "v6"
 
 def = {
 	grow_on = mg and {"default:dirt_with_grass"} or {"default:dirt_with_dry_grass",
-			"default:dry_dirt_with_dry_grass"},
+			"default:dry_dirt_with_dry_grass", "mcl_core:dirt_with_grass"},
 	grow_near = mg and "group:sand" or nil,
 	num = mg and 1 or -1
 }

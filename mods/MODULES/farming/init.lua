@@ -7,7 +7,7 @@
 
 farming = {
 	mod = "redo",
-	version = "20230831",
+	version = "20230906",
 	path = minetest.get_modpath("farming"),
 	select = {
 		type = "fixed",
@@ -332,6 +332,15 @@ minetest.register_abm({
 })
 
 
+-- Standard growth logic, swap node until we reach last stage.
+function farming.classic_growth(pos, next_stage)
+
+	local p2 = minetest.registered_nodes[next_stage].place_param2 or 1
+
+	minetest.swap_node(pos, {name = next_stage, param2 = p2})
+end
+
+
 -- Plant timer function that grows plants under the right conditions.
 function farming.plant_growth_timer(pos, elapsed, node_name)
 
@@ -352,7 +361,7 @@ function farming.plant_growth_timer(pos, elapsed, node_name)
 
 	if chk then
 
-		if chk(pos, node_name) then
+		if not chk(pos, node_name) then
 			return true
 		end
 
@@ -413,9 +422,14 @@ function farming.plant_growth_timer(pos, elapsed, node_name)
 
 	if minetest.registered_nodes[stages.stages_left[growth]] then
 
-		local p2 = minetest.registered_nodes[stages.stages_left[growth] ].place_param2 or 1
+		-- Custom grow function
+		local on_grow = minetest.registered_nodes[node_name].on_grow
 
-		minetest.swap_node(pos, {name = stages.stages_left[growth], param2 = p2})
+		if on_grow then
+			growth = on_grow(pos, stages.stages_left[growth], growth) or growth
+		else
+			farming.classic_growth(pos, stages.stages_left[growth])
+		end
 	else
 		return true
 	end
@@ -556,7 +570,10 @@ farming.register_plant = function(name, def)
 		inventory_image = def.inventory_image,
 		wield_image = def.inventory_image,
 		drawtype = "signlike",
-		groups = {seed = 1, snappy = 3, attached_node = 1, flammable = 2, growing = 1},
+		groups = {
+			seed = 1, snappy = 3, attached_node = 1, flammable = 2, growing = 1,
+			compostability = 65
+		},
 		paramtype = "light",
 		paramtype2 = "wallmounted",
 		walkable = false,
@@ -582,9 +599,11 @@ farming.register_plant = function(name, def)
 	for i = 1, def.steps do
 
 		local base_rarity = 1
+
 		if def.steps ~= 1 then
 			base_rarity =  8 - (i - 1) * 7 / (def.steps - 1)
 		end
+
 		local drop = {
 			items = {
 				{items = {mname .. ":" .. pname}, rarity = base_rarity},
@@ -596,7 +615,7 @@ farming.register_plant = function(name, def)
 
 		local sel = farming.select
 		local g = {
-			snappy = 3, flammable = 2, plant = 1, growing = 1,
+			handy = 1, snappy = 3, flammable = 2, plant = 1, growing = 1,
 			attached_node = 1, not_in_creative_inventory = 1,
 		}
 
@@ -692,7 +711,7 @@ farming.rice = true
 
 
 -- Load new global settings if found inside mod folder
-local input = io.open(farming.path.."/farming.conf", "r")
+local input = io.open(farming.path .. "/farming.conf", "r")
 if input then
 	dofile(farming.path .. "/farming.conf")
 	input:close()
@@ -700,28 +719,26 @@ end
 
 -- load new world-specific settings if found inside world folder
 local worldpath = minetest.get_worldpath()
-input = io.open(worldpath.."/farming.conf", "r")
+input = io.open(worldpath .. "/farming.conf", "r")
 if input then
 	dofile(worldpath .. "/farming.conf")
 	input:close()
 end
 
+-- recipe items
+dofile(farming.path .. "/items.lua")
 
 -- important items
-if farming.mtg then
-	dofile(farming.path.."/soil.lua")
-	dofile(farming.path.."/hoes.lua")
-	dofile(farming.path.."/grass.lua")
+if not farming.mcl then
+	dofile(farming.path .. "/soil.lua")
+	dofile(farming.path .. "/hoes.lua")
 end
 
-if farming.mcl then
-	dofile(farming.path.."/mcl_grass.lua")
-end
-
+dofile(farming.path.."/grass.lua")
 dofile(farming.path.."/utensils.lua")
 
 -- default crops
-if farming.mtg then
+if not farming.mcl then
 	dofile(farming.path.."/crops/wheat.lua")
 end
 
@@ -789,7 +806,7 @@ ddoo("ginger.lua", farming.ginger)
 
 dofile(farming.path .. "/food.lua")
 
-if farming.mtg then
+if not farming.mcl then
 	dofile(farming.path .. "/compatibility.lua") -- Farming Plus compatibility
 end
 
