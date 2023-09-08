@@ -29,8 +29,10 @@ local recipes = {
 	-- "[Compounding a] pure gum vulcanizate … with 50% of its weight of carbon black improves its tensile strength and wear resistance …"
 	{"technic:raw_latex 4",           "technic:coal_dust 2",        "technic:rubber 6", 2},
 	{"default:ice", 		  "bucket:bucket_empty",        "bucket:bucket_water", 1 },
+	-- custom
+	{"default:silver_sand 8", "technic:wrought_iron_dust", "default:sand 8"},
 }
 
-for _, data in pairs(recipes) do
+for _, data in pairs(recipes) do 
 	technic.register_alloy_recipe({input = {data[1], data[2]}, output = data[3], time = data[4]})
 end
