@@ -3223,10 +3223,6 @@ Everness:register_node('everness:forsaken_fire', {
     -- opaque, clip, blend
     use_texture_alpha = 'clip',
 })
--- Smoke support
-if minetest.get_modpath("smoke") then
-    smoke.add_source("everness:forsaken_fire", 2)
-end
 
 --
 -- Trees

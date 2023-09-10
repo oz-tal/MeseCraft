@@ -174,3 +174,7 @@ minetest.register_abm({
 	end,
 })
 
+-- Smoke support
+if minetest.get_modpath("smoke") then
+	smoke.add_source("technic:coal_alloy_furnace_active", 1)
+end

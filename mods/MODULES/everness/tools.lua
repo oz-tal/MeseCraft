@@ -212,5 +212,3 @@ minetest.register_tool('everness:shell_of_underwater_breathing', {
     -- MCL
     _mcl_toollike_wield = true,
 })
-
-mesecraft_toolranks.register_tool("everness:pick_illuminating")
