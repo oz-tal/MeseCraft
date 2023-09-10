@@ -60,14 +60,14 @@ end
 -- Stackable ingots
 if minetest.get_modpath("ingots") then
   if minetest.get_modpath("everness") then
-      ingots.register_ingots("everness:pyrite_ingot", "ingot_pyrite.png", conf.is_big)
+      ingots.register_ingots("everness:pyrite_ingot", "ingot_pyrite.png")
   end
 
   if minetest.get_modpath("pigiron") then
-      ingots.register_ingots("pigiron:iron_ingot", "ingot_pig_iron.png", conf.is_big)
+      ingots.register_ingots("pigiron:iron_ingot", "ingot_pig_iron.png")
   end
 
   if minetest.get_modpath("nether") then
-      ingots.register_ingots("nether:nether_ingot", "ingot_nether.png", conf.is_big)
+      ingots.register_ingots("nether:nether_ingot", "ingot_nether.png")
   end
 end
