@@ -26,7 +26,7 @@ mobs:register_mob("mesecraft_mobs:boomer", {
 	runaway_from = { "mobs_mc:ocelot", "mobs_mc:cat" },
 	attack_type = "explode",
 	damage = 30,
-	explosion_radius = 3,
+	explosion_radius = 0, --3
 	reach = 2,
 	explosion_damage_radius = 7,
 	explosion_timer = 1.5,
