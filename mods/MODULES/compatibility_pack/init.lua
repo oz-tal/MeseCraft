@@ -71,3 +71,21 @@ if minetest.get_modpath("ingots") then
       ingots.register_ingots("nether:nether_ingot", "ingot_nether.png")
   end
 end
+
+if minetest.get_modpath("technic") then
+  -- Allloy
+  local alloy_recipes = {
+    {"default:silver_sand 8", "technic:wrought_iron_dust", "default:sand 8"}, -- silver sand enrichment
+  }
+  for _, data in pairs(alloy_recipes) do 
+    technic.register_alloy_recipe({input = {data[1], data[2]}, output = data[3], time = data[4]})
+  end
+
+  -- Centrifuge
+  local centrifuge_recipes = {
+    {"default:sand 8", "technic:wrought_iron_dust", "default:silver_sand 8"}, -- sand purrifying
+  }
+  for _, data in pairs(centrifuge_recipes) do
+    technic.register_separating_recipe({ input = { data[1] }, output = { data[2], data[3], data[4] } })
+  end
+end
