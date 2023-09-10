@@ -54,6 +54,17 @@ if minetest.get_modpath("mesecraft_bucket") and  minetest.get_modpath("bucket") 
     output = "bucket:bucket_empty_steel 1",
     recipe = {"mesecraft_bucket:bucket_empty"}
   })
+
+  minetest.register_craft({
+    type = "shapeless",
+    output = "mesecraft_bucket:bucket_lava 1",
+    recipe = {"bucket:bucket_lava_uni_steel"}
+  })
+  minetest.register_craft({
+    type = "shapeless",
+    output = "bucket:bucket_lava_uni_steel 1",
+    recipe = {"mesecraft_bucket:bucket_lava"}
+  })
 end
 
 
