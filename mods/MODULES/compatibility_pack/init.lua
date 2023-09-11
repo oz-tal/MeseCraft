@@ -39,6 +39,12 @@ if minetest.get_modpath("smoke") then
   if minetest.get_modpath("everness") then
     smoke.add_source("everness:forsaken_fire", 2)
   end
+
+  if minetest.get_modpath("technic") then
+    smoke.add_source("technic:lv_generator_active", 1)
+    smoke.add_source("technic:mv_generator_active", 1)
+    smoke.add_source("technic:hv_generator_active", 1)
+  end
 end
 
 
@@ -98,5 +104,97 @@ if minetest.get_modpath("technic") then
   }
   for _, data in pairs(centrifuge_recipes) do
     technic.register_separating_recipe({ input = { data[1] }, output = { data[2], data[3], data[4] } })
+  end
+end
+
+
+-- Hopper containers
+if minetest.get_modpath("hopper") then
+  if minetest.get_modpath("technic") then
+    hopper:add_container({
+      {"top", "technic:mv_grinder", "dst"},
+      {"bottom", "technic:mv_grinder", "src"},
+      {"side", "technic:mv_grinder", "src"},
+
+      {"top", "technic:mv_electric_furnace", "dst"},
+      {"bottom", "technic:mv_electric_furnace", "src"},
+      {"side", "technic:mv_electric_furnace", "src"},
+
+      {"top", "technic:mv_electric_furnace_active", "dst"},
+      {"bottom", "technic:mv_electric_furnace_active", "src"},
+      {"side", "technic:mv_electric_furnace_active", "src"},
+
+      {"top", "technic:mv_alloy_furnace", "dst"},
+      {"bottom", "technic:mv_alloy_furnace", "src"},
+      {"side", "technic:mv_alloy_furnace", "src"},
+
+      {"top", "technic:mv_alloy_furnace_active", "dst"},
+      {"bottom", "technic:mv_alloy_furnace_active", "src"},
+      {"side", "technic:mv_alloy_furnace_active", "src"},
+
+      {"top", "technic:mv_centrifuge", "dst"},
+      {"bottom", "technic:mv_centrifuge", "src"},
+      {"side", "technic:mv_centrifuge", "src"},
+
+      {"top", "technic:mv_centrifuge_active", "dst"},
+      {"bottom", "technic:mv_centrifuge_active", "src"},
+      {"side", "technic:mv_centrifuge_active", "src"},
+
+      {"top", "technic:mv_compressor", "dst"},
+      {"bottom", "technic:mv_compressor", "src"},
+      {"side", "technic:mv_compressor", "src"},
+
+      {"top", "technic:mv_compressor_active", "dst"},
+      {"bottom", "technic:mv_compressor_active", "src"},
+      {"side", "technic:mv_compressor_active", "src"},
+
+      {"top", "technic:mv_extractor", "dst"},
+      {"bottom", "technic:mv_extractor", "src"},
+      {"side", "technic:mv_extractor", "src"},
+
+      {"top", "technic:mv_extractor_active", "dst"},
+      {"bottom", "technic:mv_extractor_active", "src"},
+      {"side", "technic:mv_extractor_active", "src"},
+
+      {"top", "technic:mv_grinder", "dst"},
+      {"bottom", "technic:mv_grinder", "src"},
+      {"side", "technic:mv_grinder", "src"},
+
+      {"top", "technic:mv_grinder_active", "dst"},
+      {"bottom", "technic:mv_grinder_active", "src"},
+      {"side", "technic:mv_grinder_active", "src"},
+
+      {"top", "technic:mv_freezer", "dst"},
+      {"bottom", "technic:mv_freezer", "src"},
+      {"side", "technic:mv_freezer", "src"},
+
+      {"top", "technic:mv_freezer_active", "dst"},
+      {"bottom", "technic:mv_freezer_active", "src"},
+      {"side", "technic:mv_freezer_active", "src"},
+
+      {"top", "technic:hv_electric_furnace", "dst"},
+      {"bottom", "technic:hv_electric_furnace", "src"},
+      {"side", "technic:hv_electric_furnace", "src"},
+
+      {"top", "technic:hv_electric_furnace_active", "dst"},
+      {"bottom", "technic:hv_electric_furnace_active", "src"},
+      {"side", "technic:hv_electric_furnace_active", "src"},
+
+      {"top", "technic:hv_compressor", "dst"},
+      {"bottom", "technic:hv_compressor", "src"},
+      {"side", "technic:hv_compressor", "src"},
+
+      {"top", "technic:hv_compressor_active", "dst"},
+      {"bottom", "technic:hv_compressor_active", "src"},
+      {"side", "technic:hv_compressor_active", "src"},
+
+      {"top", "technic:hv_grinder", "dst"},
+      {"bottom", "technic:hv_grinder", "src"},
+      {"side", "technic:hv_grinder", "src"},
+
+      {"top", "technic:hv_grinder_active", "dst"},
+      {"bottom", "technic:hv_grinder_active", "src"},
+      {"side", "technic:hv_grinder_active", "src"},
+    })
   end
 end
