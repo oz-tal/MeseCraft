@@ -112,6 +112,8 @@ end
 if minetest.get_modpath("hopper") then
   if minetest.get_modpath("technic") then
     hopper:add_container({
+      -- Machines
+
       {"top", "technic:mv_grinder", "dst"},
       {"bottom", "technic:mv_grinder", "src"},
       {"side", "technic:mv_grinder", "src"},
@@ -195,6 +197,36 @@ if minetest.get_modpath("hopper") then
       {"top", "technic:hv_grinder_active", "dst"},
       {"bottom", "technic:hv_grinder_active", "src"},
       {"side", "technic:hv_grinder_active", "src"},
+
+      -- Chests
+
+      {"top", "technic:iron_chest", "main"},
+      {"bottom", "technic:iron_chest", "main"},
+      {"side", "technic:iron_chest", "main"},
+
+      {"top", "technic:copper_chest", "main"},
+      {"bottom", "technic:copper_chest", "main"},
+      {"side", "technic:copper_chest", "main"},
+
+      {"top", "technic:silver_chest", "main"},
+      {"bottom", "technic:silver_chest", "main"},
+      {"side", "technic:silver_chest", "main"},
+
+      {"top", "technic:gold_chest", "main"},
+      {"bottom", "technic:gold_chest", "main"},
+      {"side", "technic:gold_chest", "main"},
+
+      {"top", "technic:mithril_chest", "main"},
+      {"bottom", "technic:mithril_chest", "main"},
+      {"side", "technic:mithril_chest", "main"},
+    })
+  end
+
+  if minetest.get_modpath("pipeworks") then
+    hopper:add_container({
+      {"top", "pipeworks:autocrafter", "dst"},
+      {"bottom", "pipeworks:autocrafter", "src"},
+      {"side", "pipeworks:autocrafter", "src"},
     })
   end
 end
