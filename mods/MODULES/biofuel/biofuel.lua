@@ -113,10 +113,10 @@ register_biofuel("farming:bottle_ethanol")
 register_biofuel("farming:hemp_oil")
 
 
---Basic Materials
-register_biofuel("basic_materials:oil_extract")
+-- --Basic Materials
+-- register_biofuel("basic_materials:oil_extract")
 
-if minetest.get_modpath("basic_materials") then
+-- if minetest.get_modpath("basic_materials") then
 
 minetest.register_craft({
 	type = "shapeless",
@@ -124,4 +124,4 @@ minetest.register_craft({
 	recipe = {"biofuel:bottle_fuel", "biofuel:bottle_fuel"}
 })
 
-end
+-- end
