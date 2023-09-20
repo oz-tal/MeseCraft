@@ -73,6 +73,20 @@ if minetest.get_modpath("mesecraft_bucket") and  minetest.get_modpath("bucket") 
   })
 end
 
+-- QUICKFIX TO CONVERT EVERNESS CHEST TO DEFAULT CHEST BACK AND FORTH
+if minetest.get_modpath("default") and  minetest.get_modpath("everness") then
+  minetest.register_craft({
+    type = "shapeless",
+    output = "everness:chest 1",
+    recipe = {"default:chest"}
+  })
+  minetest.register_craft({
+    type = "shapeless",
+    output = "default:chest 1",
+    recipe = {"everness:chest"}
+  })
+end
+
 
 -- Stackable ingots
 if minetest.get_modpath("ingots") then
@@ -227,6 +241,22 @@ if minetest.get_modpath("hopper") then
       {"top", "pipeworks:autocrafter", "dst"},
       {"bottom", "pipeworks:autocrafter", "src"},
       {"side", "pipeworks:autocrafter", "src"},
+    })
+  end
+
+  if minetest.get_modpath("digilines") then
+    hopper:add_container({
+      {"top", "digilines:chest", "main"},
+      {"bottom", "digilines:chest", "main"},
+      {"side", "digilines:chest", "main"},
+    })
+  end
+
+  if minetest.get_modpath("everness") then
+    hopper:add_container({
+      {"top", "everness:chest", "main"},
+      {"bottom", "everness:chest", "main"},
+      {"side", "everness:chest", "main"},
     })
   end
 end
